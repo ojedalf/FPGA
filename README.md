@@ -1,5 +1,5 @@
 # FPGA
-DSP and communication protocol design and verification projects
+Digital signal processing design and verification projects
 
 -----------------------------------------------------------------
 1. CIC
