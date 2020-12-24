@@ -27,8 +27,8 @@ rng('default')
 
 y4 = chirp(t,100,1,300)+sigma*randn(size(t));  % Chirp signal
 
-y1    = 0.8*sin(2*pi*(1/256)*(0:255));         % low frequency 256-sine
-y2    = 0.1*sin(2*pi*(65/256)*(0:255));        % high frequency 256-sine
+y1 = 0.8*sin(2*pi*(1/256)*(0:255));            % low frequency 256-sine
+y2 = 0.1*sin(2*pi*(65/256)*(0:255));           % high frequency 256-sine
 
 % select output signal 
 y = y1+y2;
@@ -51,7 +51,7 @@ A = [0:255; b];
 
 
 % Print to a text file in verilog format
-fileID = fopen('sinLUT.txt','w');              % File needs to ve located in a valid Matlab path
+fileID = fopen('sinLUT.txt','w');              % File needs to be located in a valid Matlab path
  
 fprintf(fileID,'module sin_LUT \n');
 fprintf(fileID,'( \n');

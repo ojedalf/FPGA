@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------------
    Testbench
 --------------------------------------------------------------------------------------
-   Author: Fernando Ojeda L.
+   Author: Fernando Ojeda L.                                                 Dic-2019
 --------------------------------------------------------------------------------------
    Description:
 --------------------------------------------------------------------------------------
@@ -10,7 +10,6 @@
    the high frequency component gets filtered and the low frequency component decimated
    by 32. Thus having at the output a 32-sinewave
 -------------------------------------------------------------------------------------*/
-
 
 `timescale 1ns/1ns
 
@@ -28,8 +27,9 @@ wire [25:0] fir_out;
 wire [7:0] dds_fir2;
 
 
-// **********  Main ***************
-
+/******************************************************************
+	Main
+*******************************************************************/
 
 // Reset
 initial
@@ -42,7 +42,6 @@ begin
 end
 
 // Clock
-//CLock
 initial 
 begin
 	clk = 1'b0;
@@ -66,34 +65,33 @@ begin
 end
 
 
+/******************************************************************
+	Instantiation
+*******************************************************************/
 
-// Instantiation
 FIR2 fir2_inst
-(
+(	
+	// Inputs
 	.reset(reset),
 	.clk(clk),
 	.x(dds_fir2),   // input to the filter (dds_fir2) or (impulse)
+	
+	// Outputs
 	.y(fir_out)
 );
 
 
 DDS dds_inst
 (
+	// Inputs
 	.clk(clk),
 	.rst(reset),
 	.phase(8'b1),
+
+	// Outputs
 	.yy(),          // single sinewave
 	.y2(dds_fir2),  // two overlapped sinewaves, low freq + high freq  
 	.y3()           // impulse response
 );
 
 endmodule
-
-
-
-
-
-
-
-
-

@@ -37,7 +37,7 @@
 	
    x --->|CIC|---> y
 
-   x ---->|I1|-->|I2|-->|I2|-->|D32|-->|C1|-->|C2|-->|C3|---> y
+   x ---->|I1|-->|I2|-->|I3|-->|D32|-->|C1|-->|C2|-->|C3|---> y
 -------------------------------------------------------------------------------*/
 
 `include "DDS.v"  
@@ -72,7 +72,9 @@ reg [5:0] count;
 reg take_sample;
 
 
-// ****************  Main ********************
+/******************************************************************
+	Main
+*******************************************************************/
 
 // downsampling control
 always@(posedge clk or posedge reset)
@@ -99,16 +101,16 @@ begin
 		integrator1  <= 0;
 		integrator2  <= 0;
 		integrator3  <= 0;
-	    comb1        <= 0;
-	    comb1_d1     <= 0;
-	    comb1_d2     <= 0;
-	    comb1_output <=	0;	
-	    comb2_d1     <=	0;	
-	    comb2_d2     <= 0;
-	    comb2_output <=	0;	
-	    comb3_d1	 <=	0;
-	    comb3_d2	 <=	0;
-	    comb3_output <=	0;	
+		comb1        <= 0;
+		comb1_d1     <= 0;
+		comb1_d2     <= 0;
+		comb1_output <=	0;	
+		comb2_d1     <=	0;	
+		comb2_d2     <= 0;
+		comb2_output <=	0;	
+		comb3_d1	 <=	0;
+		comb3_d2	 <=	0;
+		comb3_output <=	0;	
 		
 	end
     else begin
@@ -122,9 +124,9 @@ begin
     if (take_sample == 1) begin
 		// comb1 
 		comb1        <= integrator3;
-		comb1_d1     <= comb1;
-		comb1_d2     <= comb1_d1;
-		comb1_output <= comb1 - comb1_d2;
+		comb1_d1     <= comb1;                   // delay1
+		comb1_d2     <= comb1_d1;                // delay2
+		comb1_output <= comb1 - comb1_d2;        // feedforward difference
 		// comb2
 		comb2_d1     <= comb1_output;
 		comb2_d2     <= comb2_d1;

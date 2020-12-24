@@ -8,13 +8,13 @@
    DDS that generates a sinewave with 8 bits per sample
    LUT with 256 entries
    
-   Accumulator with 8-LSB (normal frequency)
+   1. Accumulator with 8-LSB (normal frequency)
    distance between samples = 1 samples
    Period    = (clk*256)
    Frequency = 1/period
    
    
-   Accumulator with 8-MSB (slower frequency)
+   2. Accumulator with 8-MSB (slower frequency)
    distance between samples = 256 samples (samples are being hold)
    Period    = (clk*256)*256
    Frequency = 1/period
@@ -23,9 +23,9 @@
    Diagram:
 ---------------------------------------------------------------------------------------------
 
-                   ---> yy
-  phase ---> |DDS| ---> y2
-                   ---> y3
+                   ---> yy - single sinewave
+  phase ---> |DDS| ---> y2 - two overlapped sinewaves, low freq + high freq 
+                   ---> y3 - impulse response
 
 -------------------------------------------------------------------------------------------*/
 
