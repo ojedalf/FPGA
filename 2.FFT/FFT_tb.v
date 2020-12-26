@@ -13,6 +13,11 @@
 ---------------------------------------------------------------------------------------
    Test:
 ---------------------------------------------------------------------------------------   
+The task called "test" has an input "number" which the user needs to provide a number
+from 1 to 4 in order to specify an input waveform. This task is in charge of displaying
+test messages and to drive the Mux sel signal which inputs the corresponding waveform
+to the FFT module.
+
    1) Specific FFT-bin set:
       Each bin is stimulated at a time in order to generate a single sinewave with its
 	  corresponding number of cycles at the output.
@@ -106,10 +111,10 @@ begin
 	begin                                                      
 		for(k = 0;k <= 10;k = k + 1) begin                     
 			$display("Stimulate only bin %d ", k+1);           
-			wait(state_t == 4'b1 & bin_t == k);                // load_state and bin_number
-			sel = 1;                                           
+			wait(state_t == 4'b1 & bin_t == k);                // load_state and bin_number, wait unitl bin k
+			sel = 1;                                           // insert one
 			#40                                                
-			sel = 0;                                           
+			sel = 0;                                           // insert zero
 			#20_000;                                           // wait for 20us
 		end                                                    
 	end                                                        
@@ -117,11 +122,11 @@ begin
 	// Test 2                                                  
 	7'd2:                                                      
 	begin                                                      
-		$display("Applying an 8-sample rectangular input");    
-		wait(state_t == 4'b1 & bin_t == 2);                    // load_state and bin_number
-		sel = 1;                                               
-		wait(state_t == 4'b1 & bin_t == 9);                    // load_state and bin_number
-		sel = 0;                                               
+		$display("Applying an 8-sample rectangular input");    // Inserts ones from bin 2 to bin 8 
+		wait(state_t == 4'b1 & bin_t == 2);                    // load_state and bin_number, wait until bin 2
+		sel = 1;                                               // insert ones
+		wait(state_t == 4'b1 & bin_t == 9);                    // load_state and bin_number, wait until bin 9
+		sel = 0;                                               // insert zeroes
 		#20_000;                                               // wait for 10us
 	end
 	
@@ -131,7 +136,7 @@ begin
 		$display("Applying sine only to the real input");
 		phase_s = 32;
 		wait(state_t == 4'h0 & bin_t == 8'h40);
-		sel = 2;
+		sel = 2;                                               // insert sinewave
 		#20_000;                                               // wait for 20us
 	end
 	
@@ -139,7 +144,7 @@ begin
 	7'd4:
 	begin
 		$display("Applying a DC waveform at the real and imaginary inputs");
-		sel = 1;
+		sel = 1;                                               // insert ones
 		#20_000;                                               // wait for 20us
 	end
 	
@@ -184,12 +189,14 @@ end
 FFT fft_inst
 (
 
+// Inputs
 .clk(clk),
 .reset(reset),
-.x_real(x_real_s),        // input
-.y_imag(y_imag_s),        // input
-.fft_real(fft_real_tb),   // Output
-.fft_imag(fft_imag_tb)    // Output
+.x_real(x_real_s),        
+.y_imag(y_imag_s),        
+// Outputs
+.fft_real(fft_real_tb),   
+.fft_imag(fft_imag_tb)    
 );
 
 /*--------------------------------------------------------
@@ -197,9 +204,11 @@ FFT fft_inst
 --------------------------------------------------------*/
 DDS dds_inst
 (
+// Inputs
 .clk(clk),
 .rst(reset),
 .phase(phase_s),
+// Outputs
 .yy(dds_fft_node),
 .y2(),
 .y3()
@@ -214,7 +223,6 @@ begin
 	test(1);    // Select a test
 	$finish;
 end
-
 
 
 /*--------------------------------------------------------
