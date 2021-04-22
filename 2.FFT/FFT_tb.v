@@ -59,7 +59,7 @@ to the FFT module.
 -------------------------------------------------------------------------------------*/
 `timescale  1ns/1ns
 
-module FFT_tb;
+module FFT_tb #(parameter gtest); // Generic Value set from terminal
 
 
 /*--------------------------------------------------------
@@ -83,6 +83,9 @@ reg[7:0] sel;
 
 // Integers
 integer k;
+
+// Simulation flag
+reg end_sim;
 
 /*--------------------------------------------------------
    Hierarchical referencing
@@ -182,6 +185,10 @@ begin
 	clk = ~clk;    // 20 ns period
 end
 
+initial 
+begin
+	end_sim = 1'b0;
+end
 
 /*--------------------------------------------------------
    DUT instantiation
@@ -220,7 +227,9 @@ DDS dds_inst
 --------------------------------------------------------*/
 initial 
 begin
-	test(1);    // Select a test
+	test(gtest);    // Select a test
+	end_sim = 1'b1;
+	#20_000;                                               // wait for 20us
 	$finish;
 end
 
